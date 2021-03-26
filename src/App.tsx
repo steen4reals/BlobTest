@@ -8,7 +8,7 @@ const storageConfigured = isStorageConfigured();
 
 const App = (): JSX.Element => {
   // all blobs in container
-  const [blobList, setBlobList] = useState<string[]>([]);
+  const [blobList, setBlobList] = useState("");
 
   // current file to upload into container
   const [fileSelected, setFileSelected] = useState(null);
@@ -27,11 +27,11 @@ const App = (): JSX.Element => {
     setUploading(true);
 
     // *** UPLOAD TO AZURE STORAGE ***
-    const blobsInContainer: string[] = await uploadFileToBlob(fileSelected);
+    const blobsInContainer: string = await uploadFileToBlob(fileSelected);
 
     // prepare UI for results
     setBlobList(blobsInContainer);
-
+    console.log(blobList);
     // reset state/form
     setFileSelected(null);
     setUploading(false);
@@ -51,20 +51,9 @@ const App = (): JSX.Element => {
   // display file name and image
   const DisplayImagesFromContainer = () => (
     <div>
-      <h2>Container items</h2>
-      <ul>
-        {blobList.map((item) => {
-          return (
-            <li key={item}>
               <div>
-                {Path.basename(item)}
-                <br />
-                <img src={item} alt={item} height="200" />
+                      <img src={blobList} alt={blobList} height="200" />
               </div>
-            </li>
-          );
-        })}
-      </ul>
     </div>
   );
 

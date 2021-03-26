@@ -3,6 +3,10 @@
 // <snippet_package>
 // THIS IS SAMPLE CODE ONLY - NOT MEANT FOR PRODUCTION USE
 import { BlobServiceClient, ContainerClient} from '@azure/storage-blob';
+import React from 'react';
+import {useState} from 'react'; 
+
+
 
 // THIS IS SAMPLE CODE ONLY - DON'T STORE TOKEN IN PRODUCTION CODE
 const sasToken = process.env.storagesastoken || "sv=2020-02-10&ss=b&srt=sco&sp=rwdlacx&se=2021-03-27T18:33:19Z&st=2021-03-26T10:33:19Z&spr=https,http&sig=iCyJx3qwmlnHS46tdZ4UQIXVDkAfEhGRcIFvuT84Qfg%3D"; // Fill string with your SAS token
@@ -49,13 +53,13 @@ const createBlobInContainer = async (containerClient: ContainerClient, file: Fil
   let item = await blobClient.uploadBrowserData(file, options);
   let data = await item._response.request.url;
   console.log(`TESTING URL ${data}`)
-
+  return data;
 }
 // </snippet_createBlobInContainer>
 
 // <snippet_uploadFileToBlob>
-const uploadFileToBlob = async (file: File | null): Promise<string[]> => {
-  if (!file) return [];
+const uploadFileToBlob = async (file: File | null): Promise<string> => {
+  if (!file) return "";
 
   // get BlobService = notice `?` is pulled out of sasToken - if created in Azure portal
   const blobService = new BlobServiceClient(
@@ -69,10 +73,10 @@ const uploadFileToBlob = async (file: File | null): Promise<string[]> => {
   });
 
   // upload file
-  await createBlobInContainer(containerClient, file);
+  const createItem = await createBlobInContainer(containerClient, file);
 
   // get list of blobs in container
-  return getBlobsInContainer(containerClient);
+  return createItem;
 };
 // </snippet_uploadFileToBlob>
 
