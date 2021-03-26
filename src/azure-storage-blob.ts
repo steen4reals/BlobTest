@@ -46,7 +46,10 @@ const createBlobInContainer = async (containerClient: ContainerClient, file: Fil
   const options = { blobHTTPHeaders: { blobContentType: file.type } };
 
   // upload file
-  await blobClient.uploadBrowserData(file, options);
+  let item = await blobClient.uploadBrowserData(file, options);
+  let data = await item._response.request.url;
+  console.log(`TESTING URL ${data}`)
+
 }
 // </snippet_createBlobInContainer>
 
